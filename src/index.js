@@ -1,3 +1,11 @@
+/* NEXT STEPS
+Head to this site: https://reactjs.org/tutorial/tutorial.html
+
+Current Stage: Adding Time Travel
+
+*/
+
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
