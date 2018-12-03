@@ -1,7 +1,7 @@
 /* NEXT STEPS
 Head to this site: https://reactjs.org/tutorial/tutorial.html
 
-Current Stage: Showing past moves
+Current Stage: Picking a key
 
 */
 
@@ -18,14 +18,13 @@ class Game extends React.Component {
       history: [{
         squares: Array(9).fill(null),
       }],
-      xIsNext: true,
-      moves: []
+      stepNumber: 0,
+      xIsNext: true
     };
   }
 
   handleClick(i) {
-    const history = this.state.history;
-    console.log('history')
+    const history = this.state.history.slice(0, this.state.stepNumber + 1);
     console.log(history)
 
     const current = history[history.length - 1];
@@ -41,41 +40,34 @@ class Game extends React.Component {
       history: history.concat([{
         squares: squares,
       }]),
+      stepNumber: history.length,
       xIsNext: !this.state.xIsNext
     })
   }
 
-  jumpTo(move){
-    const history = this.state.history;
-    const current = history[move];
-    const squares = current.squares.slice();
+  jumpTo(step) {
     this.setState({
-      history: history.concat([{
-        squares: squares,
-      }])
-    })
+      stepNumber: step,
+      xIsNext: (step % 2) === 0,
+    });
   }
 
   render() {
     const history = this.state.history;
-    const current = history[history.length - 1];
+    const current = history[this.state.stepNumber];    
     const winner = calculateWinner(current.squares);
 
     //Register a numbered list of buttons that contain, when clicked, revert the board to that number move in history
     const moves = history.map((step, move) => {
-      const desc = move ? 
+      const desc = move ?
         'Go to move #' + move :
         'Go to game start';
-        console.log('step')
-        console.log({step})
       return (
-        <li>
+        <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
         </li>
-      )
+      );
     });
-    console.log('moves')
-    console.log(moves)
 
     let status;
     if (winner) {
