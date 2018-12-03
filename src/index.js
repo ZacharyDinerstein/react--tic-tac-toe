@@ -46,7 +46,14 @@ class Game extends React.Component {
   }
 
   jumpTo(move){
-    alert(move);
+    const history = this.state.history;
+    const current = history[move];
+    const squares = current.squares.slice();
+    this.setState({
+      history: history.concat([{
+        squares: squares,
+      }])
+    })
   }
 
   render() {
