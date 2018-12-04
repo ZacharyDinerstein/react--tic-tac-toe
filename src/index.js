@@ -3,6 +3,8 @@ Head to this site: https://reactjs.org/tutorial/tutorial.html
 
 Current Stage: Picking a key
 
+- Put clicked square val in state
+
 */
 
 
@@ -15,18 +17,20 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      history: [{
-        squares: Array(9).fill(null),
-      }],
+      history: [
+        {
+          squares: Array(9).fill(null),
+          selectedSquare: null
+        }
+      ],
       stepNumber: 0,
-      xIsNext: true
+      xIsNext: true,
+      numOfSquareSelected: 0
     };
   }
 
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    console.log(history)
-
     const current = history[history.length - 1];
     const squares = current.squares.slice();
 
@@ -39,9 +43,11 @@ class Game extends React.Component {
     this.setState({
       history: history.concat([{
         squares: squares,
+        selectedSquare: i
       }]),
       stepNumber: history.length,
-      xIsNext: !this.state.xIsNext
+      xIsNext: !this.state.xIsNext,
+      numOfSquareSelected: i
     })
   }
 
@@ -54,13 +60,46 @@ class Game extends React.Component {
 
   render() {
     const history = this.state.history;
-    const current = history[this.state.stepNumber];    
+    const latestStep = this.state.stepNumber
+    const current = history[latestStep];    
     const winner = calculateWinner(current.squares);
+
 
     //Register a numbered list of buttons that contain, when clicked, revert the board to that number move in history
     const moves = history.map((step, move) => {
-      const desc = move ?
-        'Go to move #' + move :
+      console.log('step')
+      console.log(step)
+      console.log('move')
+      console.log(move)
+      console.log('step.selectedSquare')
+      console.log(step.selectedSquare)
+
+      const findSquareCoordinates = (square) => {
+        let row;
+        let col;
+
+        if (square === 0 || square === 1 || square === 2 ){
+          row = 0;
+        } else if (square === 3 || square === 4 || square === 5 ){
+          row = 1;
+        } else {
+          row = 2;
+        }
+        
+        if (square === 0 || square === 3 || square === 6 ){
+          col = 0;
+        } else if (square === 1 || square === 4 || square === 7 ){
+          col = 1;
+        } else {
+          col = 2;
+        }
+        return row + ", " + col;
+      }
+
+      let squareCoordinates = findSquareCoordinates(step.selectedSquare);
+
+      const desc = move ? 
+        'Go to move #' + move + " -- " + squareCoordinates : 
         'Go to game start';
       return (
         <li key={move}>
