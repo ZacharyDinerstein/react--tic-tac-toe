@@ -7,7 +7,7 @@ NEXT STEPS
 Head to this site: https://reactjs.org/tutorial/tutorial.html
 
 Current Stage: Picking a key
-- Put clicked square val in state
+- Extra #3: 
 
 */
 
@@ -156,10 +156,13 @@ class Game extends React.Component {
         'Go to move #' + index + " -- " + squareCoordinates : 
         'Go to game start';
 
+      /* Bold the latest move in the move log. (i.e. If our game's stepNumber is equal to the index of the button we're creating, make that new button bold. This works because, each time a new button is made, we update our state, and everytime we update our state, our ENTIRE app is re-rendered. */
+      const moveListStyle = (latestStep === index) ? "bold" : "";
+
       /* Into 'moves', push a list item contaning a button with an onClick function. Clicking on the button will call the jumpTo function with the current move passed as a parameter)  */
       return (
         <li key={index}>
-          <button className="" onClick={() => this.jumpTo(index)}>{desc}</button>
+          <button className={moveListStyle} onClick={() => this.jumpTo(index)}>{desc}</button>
         </li>
       );
     });
