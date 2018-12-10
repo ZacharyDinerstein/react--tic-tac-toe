@@ -1,8 +1,13 @@
-/* NEXT STEPS
+/* NOTES
+- Props are always passed DOWN from parent elements to their children. 
+- However, functions pass arguments UP from child elements to their parents, where that funciton is called.
+
+
+NEXT STEPS
 Head to this site: https://reactjs.org/tutorial/tutorial.html
 
 Current Stage: Picking a key
-
+- Comment entire app
 - Put clicked square val in state
 
 */
@@ -17,21 +22,39 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+
+      /* An array filled with objects. Those objects contain the values associated with each turn. Specifically, all of the board values (stored in an array), and the square clicked in that turn. */
       history: [
         {
+          /* squares = An array of all the current values of our board. */
           squares: Array(9).fill(null),
+
+          /* The array num of the most recent selected square. */
           selectedSquare: null
         }
       ],
+      /* The number of the current step in the game. */
       stepNumber: 0,
+
+      /* Which players turn is up next */
       xIsNext: true,
+
+      /* Which square was selected most recently */
       numOfSquareSelected: 0
     };
   }
 
-  handleClick(i) {
+
+  /* Run this when a square is clicked. i =  */
+  handleSquareClick(i) {
+
+    /* Create a new version of 'history'. Make it only as long as the step num we're on. */
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
+
+    /* Grab the current board move */
     const current = history[history.length - 1];
+
+    /* Make a new version of the array containing our current board move */
     const squares = current.squares.slice();
 
     //If there's a winner, or if the square clicked is already full, disable additional board clicks
@@ -56,6 +79,12 @@ class Game extends React.Component {
       stepNumber: step,
       xIsNext: (step % 2) === 0,
     });
+
+    function hi(word){
+      alert(word);
+    }
+    hi('hi');
+
   }
 
   render() {
@@ -67,13 +96,6 @@ class Game extends React.Component {
 
     //Register a numbered list of buttons that contain, when clicked, revert the board to that number move in history
     const moves = history.map((step, move) => {
-      console.log('step')
-      console.log(step)
-      console.log('move')
-      console.log(move)
-      console.log('step.selectedSquare')
-      console.log(step.selectedSquare)
-
       const findSquareCoordinates = (square) => {
         let row;
         let col;
@@ -103,7 +125,7 @@ class Game extends React.Component {
         'Go to game start';
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button className="" onClick={() => this.jumpTo(move)}>{desc}</button>
         </li>
       );
     });
@@ -119,7 +141,9 @@ class Game extends React.Component {
     return (
       <div className="game">
         <div className="game-board">
-          <Board squares={current.squares} onClick={(i) => this.handleClick(i)} />
+
+          {/* 'i' here is the value passed up from <Square /> */}
+          <Board squares={current.squares} onSquareClick={(i) => this.handleSquareClick(i)} />
         </div>
         <div className="game-info">
           <div>{status}</div>
