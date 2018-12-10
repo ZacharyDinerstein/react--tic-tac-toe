@@ -7,7 +7,6 @@ NEXT STEPS
 Head to this site: https://reactjs.org/tutorial/tutorial.html
 
 Current Stage: Picking a key
-- Comment entire app
 - Put clicked square val in state
 
 */
@@ -88,7 +87,7 @@ class Game extends React.Component {
     console.log(this.state.stepNumber);
   }
 
-  /* Update stepNumber & change player whose turn is next */
+  /* Update stepNumber & change player whose turn is next. Because state is updated, the entier app is rerendered... I think. */
   jumpTo(step) {
     this.setState({
       stepNumber: step,
@@ -119,6 +118,14 @@ class Game extends React.Component {
     return row + ", " + col;
   }
 
+  getGameStatus(winner){
+    if (winner) {
+      return 'Winner: ' + winner;
+    } else {
+      return 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+    }
+  }
+
   /* Render is called on init, and each time the state is changed.  */
   render() {
     /* Grab history */
@@ -133,14 +140,15 @@ class Game extends React.Component {
     /* Calculate if there's been a winner */
     const winner = calculateWinner(current.squares);
 
+    const gameStatus = this.getGameStatus(winner);
 
-    /* FULL: Render the move list. It's aa numbered list of buttons that, when clicked, revert the board to that number move in history */
+    /* FULL: Render the move list. It's a numbered list of buttons that, when clicked, revert the board to that number move in history */
     const moves = history.map((step, index) => {
 
       console.log('step');
       console.log(step);
 
-      /* find the square coordinates of the current move. Use the current selectedSquare as a param. (step.selectedSquare equals history[i].selectedSquare) */
+      /* find the square coordinates of the latest move. Use the latest selectedSquare as a param. */
       let squareCoordinates = this.findSquareCoordinates(step.selectedSquare);
 
       /* Create a description of the move. */
@@ -156,23 +164,20 @@ class Game extends React.Component {
       );
     });
 
-    let status;
-    if (winner) {
-      status = 'Winner: ' + winner;
-    } else {
-      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
-    }
-
-    
     return (
       <div className="game">
         <div className="game-board">
 
-          {/* 'i' here is the value passed up from <Square /> */}
+          {/* 'i' here is the value passed up from <Square />. 
+          current.squares equals the current game board. Each time the class's state is changed, the board has the option to re-render. When the 'history' array is updated, the board component will render a new board in the dom. */}
           <Board squares={current.squares} onSquareClick={(i) => this.handleSquareClick(i)} />
         </div>
         <div className="game-info">
-          <div>{status}</div>
+
+          {/* Show if there's a winner, or who's up next. */}
+          <div>{gameStatus}</div>
+
+          {/* Log the player's most recent action on the DOM. */}
           <ol>{moves}</ol>
         </div>
       </div>
@@ -180,6 +185,7 @@ class Game extends React.Component {
   }
 }
 
+/* Did a player win? */
 function calculateWinner(squares) {
   const lines = [
     [0, 1, 2],
