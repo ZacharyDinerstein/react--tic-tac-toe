@@ -38,14 +38,15 @@ class Game extends React.Component {
 
       /* Which players turn is up next */
       xIsNext: true,
-
-      /* Which square was selected most recently */
-      numOfSquareSelected: 0
     };
+    console.log('history')
+    console.log(this.state.history)
+    console.log('stepNumber')
+    console.log(this.state.stepNumber)  
   }
 
 
-  /* Run this when a square is clicked. i =  */
+  /* Run this when a square is clicked. 'i' = the index of the square that was clicked. */
   handleSquareClick(i) {
 
     /* Create a new version of 'history'. Make it only as long as the step num we're on. */
@@ -62,70 +63,95 @@ class Game extends React.Component {
       return;
     }
 
+    /* Inside the 'Squares' array, set the value of the clicked square to either 'X' or 'O' */
     squares[i] = this.state.xIsNext ? 'X':'O';
+
+
     this.setState({
-      history: history.concat([{
+      /* Add a new object to the history array. That object contains the new squares array -- which holds a new value for the square that was just clicked. It also contains the index of the square that was clicked. */
+      history: history.concat({
         squares: squares,
         selectedSquare: i
-      }]),
+      }),
+
+      /* Update the step we're on. */
       stepNumber: history.length,
-      xIsNext: !this.state.xIsNext,
-      numOfSquareSelected: i
+
+      /* Switch who the next player is */
+      xIsNext: !this.state.xIsNext
     })
+    console.log('squares');
+    console.log(squares);
+    console.log('history');
+    console.log(this.state.history);
+    console.log('step num');
+    console.log(this.state.stepNumber);
   }
 
+  /* Update stepNumber & change player whose turn is next */
   jumpTo(step) {
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0,
     });
-
-    function hi(word){
-      alert(word);
-    }
-    hi('hi');
-
   }
 
+  /* Return the board coordinates of the clicked square */
+  findSquareCoordinates(square) {
+    let row;
+    let col;
+
+    if (square === 0 || square === 1 || square === 2 ){
+      row = 0;
+    } else if (square === 3 || square === 4 || square === 5 ){
+      row = 1;
+    } else {
+      row = 2;
+    }
+    
+    if (square === 0 || square === 3 || square === 6 ){
+      col = 0;
+    } else if (square === 1 || square === 4 || square === 7 ){
+      col = 1;
+    } else {
+      col = 2;
+    }
+    return row + ", " + col;
+  }
+
+  /* Render is called on init, and each time the state is changed.  */
   render() {
+    /* Grab history */
     const history = this.state.history;
+
+    /* Grab stepNumber */
     const latestStep = this.state.stepNumber
-    const current = history[latestStep];    
+
+    /* Grab contents of most recent move */
+    const current = history[latestStep];
+
+    /* Calculate if there's been a winner */
     const winner = calculateWinner(current.squares);
 
 
-    //Register a numbered list of buttons that contain, when clicked, revert the board to that number move in history
-    const moves = history.map((step, move) => {
-      const findSquareCoordinates = (square) => {
-        let row;
-        let col;
+    /* FULL: Render the move list. It's aa numbered list of buttons that, when clicked, revert the board to that number move in history */
+    const moves = history.map((step, index) => {
 
-        if (square === 0 || square === 1 || square === 2 ){
-          row = 0;
-        } else if (square === 3 || square === 4 || square === 5 ){
-          row = 1;
-        } else {
-          row = 2;
-        }
-        
-        if (square === 0 || square === 3 || square === 6 ){
-          col = 0;
-        } else if (square === 1 || square === 4 || square === 7 ){
-          col = 1;
-        } else {
-          col = 2;
-        }
-        return row + ", " + col;
-      }
+      console.log('step');
+      console.log(step);
 
-      let squareCoordinates = findSquareCoordinates(step.selectedSquare);
+      /* find the square coordinates of the current move. Use the current selectedSquare as a param. (step.selectedSquare equals history[i].selectedSquare) */
+      let squareCoordinates = this.findSquareCoordinates(step.selectedSquare);
 
-      const desc = move ? 
-        'Go to move #' + move + " -- " + squareCoordinates : 
+      /* Create a description of the move. */
+      const desc = index ? 
+        'Go to move #' + index + " -- " + squareCoordinates : 
         'Go to game start';
+
+      /* Into 'moves', push a list item contaning a button with an onClick function. Clicking on the button will call the jumpTo function with the current move passed as a parameter)  */
       return (
-        <li key={move}>
-          <button className="" onClick={() => this.jumpTo(move)}>{desc}</button>
+        <li key={index}>
+          <button className="" onClick={() => this.jumpTo(index)}>{desc}</button>
         </li>
       );
     });
