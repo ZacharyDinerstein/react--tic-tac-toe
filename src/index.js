@@ -65,7 +65,6 @@ class Game extends React.Component {
     /* Inside the 'Squares' array, set the value of the clicked square to either 'X' or 'O' */
     squares[i] = this.state.xIsNext ? 'X':'O';
 
-
     this.setState({
       /* Add a new object to the history array. That object contains the new squares array -- which holds a new value for the square that was just clicked. It also contains the index of the square that was clicked. */
       history: history.concat({
