@@ -38,10 +38,6 @@ class Game extends React.Component {
       /* Which players turn is up next */
       xIsNext: true,
     };
-    console.log('history')
-    console.log(this.state.history)
-    console.log('stepNumber')
-    console.log(this.state.stepNumber)  
   }
 
 
@@ -78,12 +74,6 @@ class Game extends React.Component {
       /* Switch who the next player is */
       xIsNext: !this.state.xIsNext
     })
-    console.log('squares');
-    console.log(squares);
-    console.log('history');
-    console.log(this.state.history);
-    console.log('step num');
-    console.log(this.state.stepNumber);
   }
 
   /* Update stepNumber & change player whose turn is next. Because state is updated, the entier app is rerendered... I think. */
@@ -143,9 +133,6 @@ class Game extends React.Component {
 
     /* FULL: Render the move list. It's a numbered list of buttons that, when clicked, revert the board to that number move in history */
     const moves = history.map((step, index) => {
-
-      console.log('step');
-      console.log(step);
 
       /* find the square coordinates of the latest move. Use the latest selectedSquare as a param. */
       let squareCoordinates = this.findSquareCoordinates(step.selectedSquare);
