@@ -13,7 +13,7 @@ export class Board extends React.Component {
       /* props.squares comes from index.js -- the parent class -- but 'i' comes from Board.js... this class. We're combining values from each class */
       <Square 
         value={this.props.squares[i]} 
-        squareindex={i}
+        key={i}
         onSquareClick={() => this.props.onSquareClick(i)} />
     );
   }
@@ -28,7 +28,7 @@ export class Board extends React.Component {
         col.push(this.renderSquare(k))
         k++;
       }
-      rows.push(<div className="board-row">{col}</div>);
+      rows.push(<div key={i} className="board-row">{col}</div>);
     }
 
     return (
