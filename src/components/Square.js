@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 export function Square(props) {
 
   return (
-    <button key={props.myKey} className="square" onClick={props.onSquareClick}>
+    <button squareindex={props.squareIndex} className="square" onClick={props.onClick}>
       {props.value}
     </button>
   );

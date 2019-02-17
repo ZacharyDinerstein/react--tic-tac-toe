@@ -28,7 +28,7 @@ export class Board extends React.Component {
         col.push(this.renderSquare(k))
         k++;
       }
-      rows.push(<div key={i} className="board-row">{col}</div>);
+      rows.push(<div className="board-row">{col}</div>);
     }
 
     return (
